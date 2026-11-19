@@ -45,17 +45,11 @@
       <div>
         <p class="eyebrow"><span class="eyebrow-line"></span> CLASIFICACIÓN DE CARACTERES</p>
         <h1 id="page-title">Una imagen. Un carácter.</h1>
-        <p class="intro-text">Sube una imagen con un solo carácter y explora el resultado.<br class="desktop-break"> Tu modelo hará la clasificación cuando termine de entrenarse.</p>
-        <div class="character-classes" aria-label="36 clases previstas: 10 dígitos del cero al nueve y 26 letras mayúsculas de la A a la Z, sin eñe"><span>36 clases previstas</span><strong>0–9</strong><strong>A–Z</strong><strong>Sin Ñ</strong></div>
+        <p class="intro-text">Carga una imagen con un solo carácter: un número del 0 al 9 o una letra de la A a la Z, sin Ñ.</p>
+        <div class="character-classes" aria-label="36 clases: 10 dígitos del cero al nueve y 26 letras mayúsculas de la A a la Z, sin eñe"><span>36 clases previstas</span><strong>0–9</strong><strong>A–Z</strong><strong>Sin Ñ</strong></div>
       </div>
       <a href="#como-funciona" class="help-link"><svg class="icon"><use href="#i-info"/></svg> Cómo funciona</a>
     </section>
-
-    <aside class="demo-notice" aria-label="Estado del laboratorio">
-      <span class="notice-icon"><svg class="icon"><use href="#i-sliders"/></svg></span>
-      <p><strong>Tu laboratorio ya está listo para explorar.</strong><span> El modelo sigue en entrenamiento. Por ahora, los resultados son simulados.</span></p>
-      <span class="demo-badge">Modo demostración</span>
-    </aside>
 
     <div class="workspace">
       <section class="panel upload-panel" aria-labelledby="upload-heading">
@@ -99,7 +93,7 @@
             <p>Carga la imagen de un carácter y prueba<br class="desktop-break"> cómo se mostrará su clasificación.</p>
             <div class="placeholder-results" aria-hidden="true"><div><span></span><i></i></div><div><span></span><i></i></div><div><span></span><i></i></div></div>
           </div>
-          <div id="loading-results" class="loading-results" hidden><span class="loading-orbit" aria-hidden="true"></span><h3>Preparando el ejemplo…</h3><p>Estamos mostrando el flujo de la interfaz.<br>No se está ejecutando un modelo.</p></div>
+          <div id="loading-results" class="loading-results" hidden><span class="loading-orbit" aria-hidden="true"></span><h3>Preparando el ejemplo…</h3><p>Preparando la visualización del resultado de ejemplo.</p></div>
           <div id="prediction-results" class="prediction-results" hidden>
             <p class="result-eyebrow">RESULTADO DE DEMOSTRACIÓN</p>
             <div class="top-result"><span class="top-result-icon"><svg class="icon"><use href="#i-spark"/></svg></span><div><span>Carácter de ejemplo</span><h3 id="top-label">A</h3></div><strong id="top-score">82<span>%</span></strong></div>
@@ -107,19 +101,15 @@
             <ol class="score-list" id="score-list"></ol>
             <div class="result-disclaimer"><svg class="icon"><use href="#i-info"/></svg><p><strong>Estos valores son ficticios.</strong> Se muestra el mismo ejemplo para cualquier imagen; no representa una predicción.</p></div>
           </div>
-          <div class="results-footer"><span class="outline-tag">Modelo pendiente</span><p>Una imagen de entrada, una clase de carácter.<br class="desktop-break"> La clasificación real se conectará después.</p></div>
         </div>
         <span class="sr-only" id="results-announcement" role="status" aria-live="polite"></span>
       </section>
     </div>
-
-    <section class="next-step" aria-label="Próxima etapa"><div class="next-icon"><svg class="icon"><use href="#i-check"/></svg></div><div><h2>Tu clasificador, cada vez más cerca.</h2><p>Conectaremos el modelo entrenado y sus etiquetas para clasificar cada imagen como un único carácter.</p></div><span class="next-label">EN CONSTRUCCIÓN, CONTIGO</span></section>
-
     <details id="como-funciona" class="how-it-works">
       <summary><span>Un vistazo al flujo de prueba</span><svg class="icon"><use href="#i-chevron"/></svg></summary>
-      <div class="steps"><div><svg class="icon"><use href="#i-upload"/></svg><h3>Un carácter por imagen</h3><p>Selecciona un JPG, PNG o WEBP con un dígito del 0 al 9 o una letra A-Z, sin Ñ. Busca un encuadre claro y buen contraste.</p></div><div><svg class="icon"><use href="#i-spark"/></svg><h3>Explora la demostración</h3><p>Ahora verás A, H y R con puntuaciones ficticias, iguales para cualquier imagen.</p></div><div><svg class="icon"><use href="#i-focus"/></svg><h3>Conecta tu modelo después</h3><p>El modelo entrenado elegirá una de las 36 clases según la imagen. Por ahora solo se demuestra la interfaz.</p></div></div>
+      <div class="steps"><div><svg class="icon"><use href="#i-upload"/></svg><h3>Un carácter por imagen</h3><p>Selecciona un JPG, PNG o WEBP con un dígito del 0 al 9 o una letra A-Z, sin Ñ. Busca un encuadre claro y buen contraste.</p></div><div><svg class="icon"><use href="#i-spark"/></svg><h3>Explora la demostración</h3><p>Ahora verás A, H y R con puntuaciones ficticias, iguales para cualquier imagen.</p></div><div><svg class="icon"><use href="#i-focus"/></svg><h3>Consulta el resultado</h3><p>Revisa el carácter mostrado y las puntuaciones de ejemplo en el panel de resultados.</p></div></div>
     </details>
-    <footer class="site-footer"><span>visionlab<span class="brand-period">.</span> <span class="footer-divider">/</span> Un espacio para experimentar.</span><span>Borrador interactivo · Sin modelo conectado</span></footer>
+    <footer class="site-footer"><span>visionlab<span class="brand-period">.</span> <span class="footer-divider">/</span> Un espacio para experimentar.</span><span>Clasificación de caracteres - 36 clases</span></footer>
   </main>
   <noscript><p class="noscript">Activa JavaScript para cargar imágenes y probar la demostración.</p></noscript>
 </body>
