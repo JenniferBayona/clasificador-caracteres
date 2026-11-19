@@ -60,7 +60,6 @@ function clearImage({ moveFocus = false } = {}) {
   byId("image-preview").hidden = true;
   byId("dropzone-content").hidden = false;
   byId("image-meta").hidden = true;
-  byId("use-sample").hidden = false;
   input.value = "";
   showError("");
   if (moveFocus) byId("choose-image").focus();
@@ -91,7 +90,6 @@ async function loadImage({ url, name, details, objectUrl = null }) {
     byId("dropzone-content").hidden = true;
     byId("image-preview").hidden = false;
     byId("image-meta").hidden = false;
-    byId("use-sample").hidden = true;
     byId("file-name").textContent = name;
     byId("file-details").textContent = `${candidate.naturalWidth} × ${candidate.naturalHeight} px · ${details}`;
     byId("results-announcement").textContent = "Imagen lista para clasificar.";
@@ -154,9 +152,6 @@ input.addEventListener("change", () => {
   input.value = "";
 });
 byId("remove-image").addEventListener("click", () => clearImage({ moveFocus: true }));
-byId("use-sample").addEventListener("click", () => {
-  void loadImage({ url: new URL("./assets/sample.svg", import.meta.url).href, name: "Letra A de ejemplo", details: "Carácter ilustrativo · A" });
-});
 
 for (const eventName of ["dragenter", "dragover", "dragleave", "drop"]) {
   dropzone.addEventListener(eventName, (event) => event.preventDefault());
