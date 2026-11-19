@@ -46,8 +46,28 @@
       <div>
         <p class="eyebrow"><span class="eyebrow-line"></span> CLASIFICACIÓN DE CARACTERES</p>
         <h1 id="page-title">Una imagen. Un carácter.</h1>
-        <p class="intro-text">Carga una imagen con un solo carácter: un número del 0 al 9 o una letra de la A a la Z, sin Ñ.</p>
-        <div class="character-classes" aria-label="36 clases: 10 dígitos del cero al nueve y 26 letras mayúsculas de la A a la Z, sin eñe"><span>36 clases previstas</span><strong>0–9</strong><strong>A–Z</strong><strong>Sin Ñ</strong></div>
+      <p class="intro-text">
+        Este proyecto utiliza un modelo de clasificación de imágenes
+        entrenado en <strong>Microsoft Azure Custom Vision</strong>.
+        Para su entrenamiento se empleó una selección de imágenes
+        del archivo <strong>EnglishFnt.tgz</strong>, perteneciente al
+        conjunto de datos
+        <a
+          href="https://teodecampos.github.io/chars74k/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="text-decoration: underline;"
+        >Chars74K</a>
+        (de Campos, Babu y Varma, 2009).
+        Este subconjunto contiene caracteres generados a partir de
+        fuentes tipográficas.
+        <br><br>
+        El modelo está diseñado para clasificar imágenes con un solo
+        carácter entre <strong>36 clases</strong>: los números
+        <strong>0–9</strong> y las letras mayúsculas
+        <strong>A–Z, sin Ñ</strong>.
+      </p>        
+      <div class="character-classes" aria-label="36 clases: 10 dígitos del cero al nueve y 26 letras mayúsculas de la A a la Z, sin eñe"><span>36 clases previstas</span><strong>0–9</strong><strong>A–Z</strong><strong>Sin Ñ</strong></div>
       </div>
       <a href="#como-funciona" class="help-link"><svg class="icon"><use href="#i-info"/></svg> Cómo funciona</a>
     </section>
