@@ -26,8 +26,17 @@ function setResultState(state) {
   run.classList.toggle("is-loading", busy);
   run.querySelector(".button-loader").hidden = !busy;
   run.disabled = busy || !currentImage;
-  byId("run-label").textContent = busy ? "Preparando demostración…" : state === "prediction" ? "Repetir demostración" : "Probar demostración";
-  byId("result-status").textContent = busy ? "Preparando" : state === "prediction" ? "Ejemplo simulado" : "En espera";
+  byId("run-label").textContent = busy
+  ? "Analizando imagen…"
+  : state === "prediction"
+    ? "Analizar otra vez"
+    : "Clasificar imagen";
+
+byId("result-status").textContent = busy
+  ? "Analizando"
+  : state === "prediction"
+    ? "Resultado"
+    : "En espera";
   byId("result-status").classList.toggle("is-complete", state === "prediction");
 }
 
@@ -85,7 +94,7 @@ async function loadImage({ url, name, details, objectUrl = null }) {
     byId("use-sample").hidden = true;
     byId("file-name").textContent = name;
     byId("file-details").textContent = `${candidate.naturalWidth} × ${candidate.naturalHeight} px · ${details}`;
-    byId("results-announcement").textContent = "Imagen lista. Puedes probar la demostración.";
+    byId("results-announcement").textContent = "Imagen lista para clasificar.";
     run.disabled = false;
   } catch (error) {
     if (objectUrl) URL.revokeObjectURL(objectUrl);
@@ -177,17 +186,17 @@ run.addEventListener("click", async () => {
   const element = currentImage.element;
   showError("");
   setResultState("loading");
-  byId("results-announcement").textContent = "Preparando resultados ficticios de demostración.";
+  byId("results-announcement").textContent = "Analizando la imagen con el modelo.";
   try {
     const result = await predict(element, { signal: controller.signal });
     if (controller.signal.aborted || activePrediction !== controller) return;
     renderPredictions(result.predictions);
     setResultState("prediction");
-    byId("results-announcement").textContent = "Demostración lista. Los valores mostrados son ficticios y no dependen de la imagen.";
+    byId("results-announcement").textContent = "Clasificación completada.";
   } catch (error) {
     if (controller.signal.aborted || activePrediction !== controller) return;
     setResultState("empty");
-    showError(error.message || "No se pudo completar la demostración. Inténtalo de nuevo.");
+    showError(error.message || "No se pudo clasificar la imagen. Inténtalo de nuevo.");
   } finally {
     if (activePrediction === controller) activePrediction = null;
   }
