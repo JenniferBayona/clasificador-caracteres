@@ -80,7 +80,7 @@
           <p class="file-error" id="file-error" role="alert" hidden></p>
           <div class="image-meta" id="image-meta" hidden><span class="file-icon"><svg class="icon"><use href="#i-image"/></svg></span><div><strong id="file-name"></strong><span id="file-details"></span></div><button type="button" class="text-button" id="change-image">Cambiar</button></div>
           <button type="button" class="sample-button" id="use-sample"><img src="./assets/sample.svg" alt="" width="48" height="38"><span>¿Solo quieres explorar?<strong>Usar ejemplo con la letra A</strong></span><span class="sample-pill">Probar</span></button>
-          <button type="button" class="button button-primary" id="run-prediction" disabled><svg class="icon"><use href="#i-spark"/></svg><span id="run-label">Probar demostración</span><span class="button-loader" hidden></span></button>
+          <button type="button" class="button button-primary" id="run-prediction" disabled><svg class="icon"><use href="#i-spark"/></svg><span id="run-label">Clasificar imagen</span><span class="button-loader" hidden></span></button>
           <p class="privacy-note"><svg class="icon"><use href="#i-lock"/></svg> Tu imagen se queda en este navegador.</p>
         </div>
       </section>
@@ -94,13 +94,13 @@
             <p>Carga la imagen de un carácter y prueba<br class="desktop-break"> cómo se mostrará su clasificación.</p>
             <div class="placeholder-results" aria-hidden="true"><div><span></span><i></i></div><div><span></span><i></i></div><div><span></span><i></i></div></div>
           </div>
-          <div id="loading-results" class="loading-results" hidden><span class="loading-orbit" aria-hidden="true"></span><h3>Preparando el ejemplo…</h3><p>Preparando la visualización del resultado de ejemplo.</p></div>
+          <div id="loading-results" class="loading-results" hidden><span class="loading-orbit" aria-hidden="true"></span><h3>Preparando el modelo…</h3><p>El modelo está procesando la imagen.</p></div>
           <div id="prediction-results" class="prediction-results" hidden>
-            <p class="result-eyebrow">RESULTADO DE DEMOSTRACIÓN</p>
-            <div class="top-result"><span class="top-result-icon"><svg class="icon"><use href="#i-spark"/></svg></span><div><span>Carácter de ejemplo</span><h3 id="top-label">A</h3></div><strong id="top-score">82<span>%</span></strong></div>
-            <p class="distribution-label">Puntuaciones de ejemplo</p>
+            <p class="result-eyebrow">RESULTADO DE CLASIFICACIÓN</p>
+            <div class="top-result"><span class="top-result-icon"><svg class="icon"><use href="#i-spark"/></svg></span><div><span>Carácter predicho</span><h3 id="top-label">A</h3></div><strong id="top-score">82<span>%</span></strong></div>
+            <p class="distribution-label">Clases más probables</p>
             <ol class="score-list" id="score-list"></ol>
-            <div class="result-disclaimer"><svg class="icon"><use href="#i-info"/></svg><p><strong>Estos valores son ficticios.</strong> Se muestra el mismo ejemplo para cualquier imagen; no representa una predicción.</p></div>
+          
           </div>
         </div>
         <span class="sr-only" id="results-announcement" role="status" aria-live="polite"></span>
@@ -108,7 +108,7 @@
     </div>
     <details id="como-funciona" class="how-it-works">
       <summary><span>Un vistazo al flujo de prueba</span><svg class="icon"><use href="#i-chevron"/></svg></summary>
-      <div class="steps"><div><svg class="icon"><use href="#i-upload"/></svg><h3>Un carácter por imagen</h3><p>Selecciona un JPG, PNG o WEBP con un dígito del 0 al 9 o una letra A-Z, sin Ñ. Busca un encuadre claro y buen contraste.</p></div><div><svg class="icon"><use href="#i-spark"/></svg><h3>Explora la demostración</h3><p>Ahora verás A, H y R con puntuaciones ficticias, iguales para cualquier imagen.</p></div><div><svg class="icon"><use href="#i-focus"/></svg><h3>Consulta el resultado</h3><p>Revisa el carácter mostrado y las puntuaciones de ejemplo en el panel de resultados.</p></div></div>
+      <div class="steps"><div><svg class="icon"><use href="#i-upload"/></svg><h3>Un carácter por imagen</h3><p>Selecciona un JPG, PNG o WEBP con un dígito del 0 al 9 o una letra A-Z, sin Ñ. Busca un encuadre claro y buen contraste.</p></div><div><svg class="icon"><use href="#i-spark"/></svg><h3>Explora la demostración</h3><p><p>El modelo evalúa las 36 clases y muestra las tres con mayor puntuación para la imagen seleccionada.</p></p></div><div><svg class="icon"><use href="#i-focus"/></svg><h3>Consulta el resultado</h3><p>Revisa el carácter mostrado y las puntuaciones de ejemplo en el panel de resultados.</p></div></div>
     </details>
     <footer class="site-footer"><span>Vision por Computadora<span class="brand-period">.</span> <span class="footer-divider">/</span> Un espacio para experimentar.</span><span>Clasificación de caracteres - 36 clases</span><span>Autor: Jennifer Juliana Bayona Rojas</span></footer>
   </main>
