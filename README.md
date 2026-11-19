@@ -79,19 +79,3 @@ python -m http.server 8000
 Visita `http://localhost:8000`. No abras `index.html` con doble clic: los módulos
 JavaScript necesitan servirse mediante HTTP.
 
-## Si algo no aparece
-
-- **Ves un README o un error 404:** revisa que `index.html` esté en la raíz y
-  que Pages use `main` y `/(root)`.
-- **Faltan los estilos o el ejemplo:** verifica que subiste `styles.css`, los
-  tres archivos JavaScript y la carpeta `assets`, conservando sus nombres.
-- **No aparece todavía la URL:** revisa la pestaña **Actions** y espera a que
-  termine el despliegue de Pages.
-- **Cargas una B y el ejemplo muestra A:** es normal en este borrador. Los
-  resultados son simulados hasta conectar el modelo.
-
-## Documentación de GitHub
-
-- Crear el sitio: https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site
-- Subir archivos: https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository
-- Configurar Pages: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
