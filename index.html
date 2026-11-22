@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Clasificador de 36 caracteres: dígitos del 0 al 9 y letras mayúsculas de la A a la Z, sin Ñ. Interfaz de prueba con resultados simulados mientras se entrena el modelo.">
+  <meta name="description" content="Clasifica imágenes de letras y números con Azure Custom Vision. Modelo de 36 clases entrenado con EnglishFnt y GoodImg de Chars74K, con carga individual, procesamiento por lotes y exportación CSV.">
   <meta name="theme-color" content="#087f75">
-  <title>Proyecto Vision por computadora</title>
+  <title>Clasificador de caracteres en imágenes</title>
   <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
   <link rel="stylesheet" href="./styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
@@ -28,17 +28,11 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="./"
-         aria-label="Proyecto Final Vision por computadora, inicio">
-        <span class="brand-mark">
-          <svg class="icon"><use href="#i-focus"/></svg>
-        </span>
-        <span>Proyecto Final Vision por computadora</span>
+      <a class="brand" href="./" aria-label="Clasificador de caracteres, inicio">
+        <span class="brand-mark"><svg class="icon"><use href="#i-focus"/></svg></span>
+        <span>Clasificador de caracteres</span>
       </a>
-  
-      <div class="header-right">
-        <span class="workspace-label">Clasificador de caracteres</span>
-      </div>
+      <div class="header-right"><span class="workspace-label">Visión por computador</span></div>
     </div>
   </header>
 
@@ -46,29 +40,22 @@
     <section class="intro" aria-labelledby="page-title">
       <div>
         <p class="eyebrow"><span class="eyebrow-line"></span> CLASIFICACIÓN DE CARACTERES</p>
-        <h1 id="page-title">Una imagen. Un carácter.</h1>
-      <p class="intro-text">
-        Este proyecto utiliza un modelo de clasificación de imágenes
-        entrenado en <strong>Microsoft Azure Custom Vision</strong>.
-        Para su entrenamiento se empleó una selección de imágenes
-        del archivo <strong>EnglishFnt.tgz</strong>, perteneciente al
-        conjunto de datos
-        <a
-          href="https://teodecampos.github.io/chars74k/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="text-decoration: underline;"
-        >Chars74K</a>
-        (de Campos, Babu y Varma, 2009).
-        Este subconjunto contiene caracteres generados a partir de
-        fuentes tipográficas.
-        <br><br>
-        El modelo está diseñado para clasificar imágenes con un solo
-        carácter entre <strong>36 clases</strong>: los números
-        <strong>0–9</strong> y las letras mayúsculas
-        <strong>A–Z, sin Ñ</strong>.
-      </p>        
-      <div class="character-classes" aria-label="36 clases: 10 dígitos del cero al nueve y 26 letras mayúsculas de la A a la Z, sin eñe"><span>36 clases previstas</span><strong>0–9</strong><strong>A–Z</strong><strong>Sin Ñ</strong></div>
+        <h1 id="page-title">Clasifica letras y números en imágenes</h1>
+        <p class="intro-text">
+          Esta aplicación clasifica imágenes con un solo carácter mediante un modelo entrenado en
+          <strong>Microsoft Azure Custom Vision</strong> con imágenes de <strong>EnglishFnt y GoodImg</strong> de
+          <a href="https://teodecampos.github.io/chars74k/" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">Chars74K</a>
+          (de Campos, Babu y Varma, 2009). El conjunto combina caracteres de fuentes tipográficas con caracteres de escenas fotografiadas.
+          <br><br>
+          El modelo utiliza <strong>36 clases</strong>: los dígitos <strong>0–9</strong> y las letras <strong>A–Z, sin Ñ</strong>.
+          Las variantes mayúscula y minúscula de cada letra comparten una etiqueta; por ejemplo, A y a se clasifican como A.
+        </p>
+        <p class="intro-text">
+          El proyecto surge de la necesidad de facilitar la consulta y la verificación de documentos de licitación cuya información se encuentra en imágenes.
+          Su alcance es identificar caracteres aislados como base para estudiar el reconocimiento de texto en documentos.
+          Puedes clasificar una imagen o procesar un conjunto de imágenes, con un solo carácter por archivo.
+        </p>
+        <div class="character-classes" aria-label="36 clases: 10 dígitos y 26 letras con mayúsculas y minúsculas agrupadas, sin eñe"><span>36 clases del modelo</span><strong>0–9</strong><strong>A–Z</strong><strong>Sin Ñ</strong></div>
       </div>
       <a href="#como-funciona" class="help-link"><svg class="icon"><use href="#i-info"/></svg> Cómo funciona</a>
     </section>
@@ -76,7 +63,7 @@
     <div class="workspace">
       <section class="panel upload-panel" aria-labelledby="upload-heading">
         <div class="panel-header">
-          <div class="panel-title"><svg class="icon"><use href="#i-image"/></svg><h2 id="upload-heading">Imagen de prueba</h2></div>
+          <div class="panel-title"><svg class="icon"><use href="#i-image"/></svg><h2 id="upload-heading">Imagen para clasificar</h2></div>
           <span class="panel-caption">Un carácter por imagen</span>
         </div>
         <div class="upload-body">
@@ -88,7 +75,7 @@
                 <svg class="upload-picture" viewBox="0 0 92 88" fill="none"><rect x="14" y="13" width="60" height="60" rx="10" transform="rotate(-9 14 13)" fill="#d6e7e3"/><rect x="22" y="18" width="60" height="60" rx="10" fill="white" stroke="#9cbfb5" stroke-width="1.5"/><circle cx="41" cy="37" r="5" fill="#b0d8cd"/><path d="m27 67 17-18 12 11 9-9 12 16" stroke="#087f75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="75" cy="20" r="12" fill="#087f75"/><path d="M75 25V15m-4 4 4-4 4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
               <h3>Sube la imagen de un carácter</h3>
-              <p>Encuádralo con claridad y arrastra la imagen aquí.</p>
+              <p>Selecciona una imagen nítida, con buen contraste, o arrástrala aquí.</p>
               <button type="button" class="button button-secondary" id="choose-image"><svg class="icon"><use href="#i-upload"/></svg> Seleccionar imagen</button>
               <span class="file-hint">JPG, PNG o WEBP · Máximo 10 MB</span>
             </div>
@@ -110,28 +97,32 @@
         <div class="results-body">
           <div id="empty-results" class="empty-results">
             <div class="empty-symbol" aria-hidden="true"><svg class="icon"><use href="#i-focus"/></svg><span class="symbol-cross cross-top"></span><span class="symbol-cross cross-bottom"></span></div>
-            <h3>Un lugar para tu próximo resultado</h3>
-            <p>Carga la imagen de un carácter y prueba<br class="desktop-break"> cómo se mostrará su clasificación.</p>
+            <h3>Selecciona una imagen para comenzar</h3>
+            <p>Al clasificarla verás el carácter predicho<br class="desktop-break"> y las tres clases con mayor puntuación.</p>
             <div class="placeholder-results" aria-hidden="true"><div><span></span><i></i></div><div><span></span><i></i></div><div><span></span><i></i></div></div>
           </div>
-          <div id="loading-results" class="loading-results" hidden><span class="loading-orbit" aria-hidden="true"></span><h3>Preparando el modelo…</h3><p>El modelo está procesando la imagen.</p></div>
+          <div id="loading-results" class="loading-results" hidden><span class="loading-orbit" aria-hidden="true"></span><h3>Analizando imagen…</h3><p>El modelo está procesando la imagen.</p></div>
           <div id="prediction-results" class="prediction-results" hidden>
             <p class="result-eyebrow">RESULTADO DE CLASIFICACIÓN</p>
-            <div class="top-result"><span class="top-result-icon"><svg class="icon"><use href="#i-spark"/></svg></span><div><span>Carácter predicho</span><h3 id="top-label">A</h3></div><strong id="top-score">82<span>%</span></strong></div>
+            <div class="top-result"><span class="top-result-icon"><svg class="icon"><use href="#i-spark"/></svg></span><div><span>Carácter predicho</span><h3 id="top-label">—</h3></div><strong id="top-score">—<span>%</span></strong></div>
             <p class="distribution-label">Clases más probables</p>
             <ol class="score-list" id="score-list"></ol>
-          
           </div>
         </div>
         <span class="sr-only" id="results-announcement" role="status" aria-live="polite"></span>
       </section>
     </div>
+
     <details id="como-funciona" class="how-it-works">
-      <summary><span>Un vistazo al flujo de prueba</span><svg class="icon"><use href="#i-chevron"/></svg></summary>
-      <div class="steps"><div><svg class="icon"><use href="#i-upload"/></svg><h3>Un carácter por imagen</h3><p>Selecciona un JPG, PNG o WEBP con un dígito del 0 al 9 o una letra A-Z, sin Ñ. Busca un encuadre claro y buen contraste.</p></div><div><svg class="icon"><use href="#i-spark"/></svg><h3>Explora la demostración</h3><p><p>El modelo evalúa las 36 clases y muestra las tres con mayor puntuación para la imagen seleccionada.</p></p></div><div><svg class="icon"><use href="#i-focus"/></svg><h3>Consulta el resultado</h3><p>Revisa el carácter mostrado y las puntuaciones de ejemplo en el panel de resultados.</p></div></div>
+      <summary><span>Cómo clasificar tus imágenes</span><svg class="icon"><use href="#i-chevron"/></svg></summary>
+      <div class="steps">
+        <div><svg class="icon"><use href="#i-upload"/></svg><h3>Carga las imágenes</h3><p>Selecciona una imagen o utiliza Clasificar un dataset para cargar varias imágenes o una carpeta. Cada archivo debe contener un solo dígito o una letra, con un encuadre claro y buen contraste.</p></div>
+        <div><svg class="icon"><use href="#i-spark"/></svg><h3>Ejecuta la clasificación</h3><p>Pulsa Clasificar imagen o Procesar dataset. El modelo analiza las imágenes y devuelve las puntuaciones de sus 36 clases. Las mayúsculas y minúsculas comparten etiqueta.</p></div>
+        <div><svg class="icon"><use href="#i-focus"/></svg><h3>Revisa y exporta los resultados</h3><p>Consulta las tres clases más probables de una imagen o la predicción de cada archivo del conjunto y descarga su CSV. Revisa los resultados de baja puntuación y los caracteres parecidos, como 0/O e I/L.</p></div>
+      </div>
     </details>
-    <footer class="site-footer"><span>Vision por Computadora<span class="brand-period">.</span> <span class="footer-divider">/</span><span>Autor: Jennifer Juliana Bayona Rojas</span></footer>
+    <footer class="site-footer"><span>Visión por computador<span class="brand-period">.</span> <span class="footer-divider">/</span><span>Autora: Jennifer Juliana Bayona Rojas</span></footer>
   </main>
-  <noscript><p class="noscript">Activa JavaScript para cargar imágenes y probar la demostración.</p></noscript>
+  <noscript><p class="noscript">Activa JavaScript para cargar imágenes y obtener clasificaciones.</p></noscript>
 </body>
 </html>
