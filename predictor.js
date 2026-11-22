@@ -1,105 +1,88 @@
 import { config } from "./config.js";
 
-let resourcesPromise = null;
-
-function loadResources() {
-  if (!resourcesPromise) {
-    resourcesPromise = (async () => {
-      const tf = window.tf;
-
-      if (!tf) {
-        throw new Error("No se pudo cargar TensorFlow.js.");
-      }
-
-      const response = await fetch(
-        new URL("./model/labels.txt", import.meta.url)
-      );
-
-      if (!response.ok) {
-        throw new Error("No se encontró model/labels.txt.");
-      }
-
-      const labels = (await response.text())
-        .trim()
-        .split(/\r?\n/)
-        .map(label => label.trim());
-
-      if (labels.length !== 36) {
-        throw new Error("labels.txt debe contener las 36 clases.");
-      }
-
-      await tf.ready();
-
-      const model = await tf.loadGraphModel(
-        new URL("./model/model.json", import.meta.url).href
-      );
-
-      return { tf, model, labels };
-    })().catch(error => {
-      resourcesPromise = null;
-      throw error;
-    });
-  }
-
-  return resourcesPromise;
-}
-
 export async function predict(image, { signal } = {}) {
   signal?.throwIfAborted();
-
-  if (config.mode !== "model") {
-    throw new Error('Cambia mode a "model" en config.js.');
-  }
 
   if (!image?.naturalWidth) {
     throw new Error("Selecciona una imagen primero.");
   }
 
-  const { tf, model, labels } = await loadResources();
+  // Conserva la proporción y limita el lado mayor a 1024 píxeles.
+  const scale = Math.min(
+    1,
+    1024 / Math.max(image.naturalWidth, image.naturalHeight)
+  );
+
+  const canvas = document.createElement("canvas");
+
+  canvas.width = Math.max(
+    1, Math.round(image.naturalWidth * scale)
+  );
+
+  canvas.height = Math.max(
+    1, Math.round(image.naturalHeight * scale)
+  );
+
+  const context = canvas.getContext("2d");
+
+  context.fillStyle = "white";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  // Convierte la imagen a JPEG antes de enviarla.
+  const blob = await new Promise(resolve =>
+    canvas.toBlob(resolve, "image/jpeg", 0.92)
+  );
+
+  if (!blob || blob.size > 4_000_000) {
+    throw new Error(
+      "No se pudo preparar la imagen. Prueba con un archivo más pequeño."
+    );
+  }
+
   signal?.throwIfAborted();
 
-  const input = tf.tidy(() => {
-    const pixels = tf.browser.fromPixels(image, 3);
-    const [height, width] = pixels.shape;
-    const side = Math.min(height, width);
-
-    const y = (height - side) / (2 * height);
-    const x = (width - side) / (2 * width);
-
-    return tf.image.cropAndResize(
-      pixels.toFloat().expandDims(0),
-      [[y, x, 1 - y, 1 - x]],
-      [0],
-      [300, 300]
-    );
+  const response = await fetch(config.apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/octet-stream"
+    },
+    body: blob,
+    signal
   });
 
-  let output;
+  const data = await response.json().catch(() => ({}));
 
-  try {
-    output = model.execute(input, "model_output");
-    const scores = Array.from(await output.data());
-
-    signal?.throwIfAborted();
-
-    if (scores.length !== labels.length) {
-      throw new Error("Las salidas no coinciden con las etiquetas.");
-    }
-
-    const predictions = labels
-      .map((label, index) => ({
-        label,
-        score: scores[index]
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
-
-    return {
-      simulated: false,
-      predictions
-    };
-  } finally {
-    input.dispose();
-    output?.dispose();
+  if (!response.ok) {
+    throw new Error(
+      data.error || `La API respondió ${response.status}.`
+    );
   }
+
+  if (!Array.isArray(data.predictions)) {
+    throw new Error("La API no devolvió predicciones válidas.");
+  }
+
+  const predictions = data.predictions
+    .map(item => ({
+      label: item.tagName,
+      score: item.probability
+    }))
+    .filter(item =>
+      typeof item.label === "string" &&
+      Number.isFinite(item.score) &&
+      item.score >= 0 &&
+      item.score <= 1
+    )
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
+  if (!predictions.length) {
+    throw new Error("La API devolvió una lista de resultados vacía.");
+  }
+
+  return {
+    simulated: false,
+    predictions
+  };
 }
